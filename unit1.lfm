@@ -1,0 +1,29 @@
+object Schedule: TSchedule
+  Left = 945
+  Height = 337
+  Top = 20
+  Width = 367
+  BorderIcons = [biSystemMenu]
+  Caption = 'Schedule'
+  Menu = MainMenu
+  OnCreate = FormCreate
+  LCLVersion = '1.0.12.0'
+  object MainMenu: TMainMenu
+    left = 16
+    top = 16
+    object MenuFile: TMenuItem
+      Caption = 'Файл'
+      object MenuExit: TMenuItem
+        Caption = 'Выход'
+        OnClick = MenuExitClick
+      end
+    end
+    object MenuReferences: TMenuItem
+      Caption = 'Справочники'
+    end
+    object MenuHelps: TMenuItem
+      Caption = 'Помощь'
+      OnClick = MenuHelpsClick
+    end
+  end
+end

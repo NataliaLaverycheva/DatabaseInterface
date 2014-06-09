@@ -1,0 +1,157 @@
+object T: TT
+  Left = 169
+  Height = 682
+  Top = 172
+  Width = 1158
+  BorderStyle = bsDialog
+  Caption = 'T'
+  ClientHeight = 682
+  ClientWidth = 1158
+  LCLVersion = '1.0.12.0'
+  object FieldPanel: TPanel
+    Left = 442
+    Height = 682
+    Top = 0
+    Width = 716
+    Align = alRight
+    Anchors = []
+    ClientHeight = 682
+    ClientWidth = 716
+    TabOrder = 0
+    object XCoord: TComboBox
+      Left = 320
+      Height = 23
+      Top = 25
+      Width = 93
+      ItemHeight = 15
+      Style = csDropDownList
+      TabOrder = 0
+    end
+    object YCoord: TComboBox
+      Left = 320
+      Height = 23
+      Top = 72
+      Width = 92
+      ItemHeight = 15
+      Style = csDropDownList
+      TabOrder = 1
+    end
+    object ShowSched: TSpeedButton
+      Left = 460
+      Height = 30
+      Top = 55
+      Width = 92
+      Caption = 'Показать'
+      NumGlyphs = 0
+      OnClick = ShowSchedClick
+    end
+    object XLabel: TLabel
+      Left = 320
+      Height = 16
+      Top = 5
+      Width = 93
+      Caption = 'По горизонтали:'
+      ParentColor = False
+    end
+    object yLabel: TLabel
+      Left = 320
+      Height = 16
+      Top = 50
+      Width = 83
+      Caption = 'По вертикали: '
+      ParentColor = False
+    end
+    object ShowFName: TCheckBox
+      Left = 435
+      Height = 19
+      Top = 20
+      Width = 159
+      Caption = 'Отобразить имена полей'
+      Checked = True
+      OnChange = ShowFNameChange
+      OnClick = ShowFNameChange
+      State = cbChecked
+      TabOrder = 2
+    end
+  end
+  object DrawGrid: TDrawGrid
+    Left = 442
+    Height = 605
+    Top = 100
+    Width = 927
+    ExtendedSelect = False
+    TabOrder = 1
+    OnDrawCell = DrawGridDrawCell
+  end
+  object FilterPanel: TPanel
+    Left = 0
+    Height = 682
+    Top = 0
+    Width = 445
+    Align = alLeft
+    ClientHeight = 682
+    ClientWidth = 445
+    TabOrder = 2
+    object FilterBtnPanel: TPanel
+      Left = 1
+      Height = 44
+      Top = 1
+      Width = 443
+      Align = alTop
+      ClientHeight = 44
+      ClientWidth = 443
+      TabOrder = 0
+      object LabelFilter: TLabel
+        Left = 9
+        Height = 21
+        Top = 7
+        Width = 87
+        AutoSize = False
+        Caption = 'Фильтры: '
+        Font.Color = clBackground
+        Font.Name = '@Meiryo'
+        ParentColor = False
+        ParentFont = False
+      end
+      object BtnAddFilter: TSpeedButton
+        Left = 105
+        Height = 23
+        Top = 7
+        Width = 115
+        Caption = 'Добавить фильтр'
+        NumGlyphs = 0
+        OnClick = BtnAddFilterClick
+      end
+      object BtnExecuteFilter: TSpeedButton
+        Left = 225
+        Height = 23
+        Top = 7
+        Width = 115
+        Caption = 'Применить фильтр'
+        NumGlyphs = 0
+      end
+      object LogicalConnective: TComboBox
+        Left = 345
+        Height = 23
+        Top = 7
+        Width = 72
+        ItemHeight = 15
+        Style = csDropDownList
+        TabOrder = 0
+      end
+    end
+  end
+  object Datasource: TDatasource
+    DataSet = SQLQuery
+    left = 35
+    top = 235
+  end
+  object SQLQuery: TSQLQuery
+    FieldDefs = <>
+    Database = ConnectForm.IBConnection
+    Transaction = ConnectForm.SQLTransaction
+    Params = <>
+    left = 135
+    top = 280
+  end
+end

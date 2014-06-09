@@ -1,0 +1,47 @@
+object EditForm: TEditForm
+  Left = 809
+  Height = 422
+  Top = 86
+  Width = 428
+  Caption = 'Карточка'
+  ClientHeight = 422
+  ClientWidth = 428
+  LCLVersion = '1.0.12.0'
+  object BtnSave: TSpeedButton
+    Left = 5
+    Height = 28
+    Top = 5
+    Width = 87
+    Caption = 'Сохранить'
+    NumGlyphs = 0
+    OnClick = BtnSaveClick
+  end
+  object BtnDel: TSpeedButton
+    Left = 100
+    Height = 28
+    Top = 5
+    Width = 87
+    Caption = 'Отменить'
+    NumGlyphs = 0
+    OnClick = BtnDelClick
+  end
+  object Panel: TPanel
+    Left = 5
+    Height = 375
+    Top = 45
+    Width = 418
+    ParentBidiMode = False
+    TabOrder = 0
+  end
+  object Datasource1: TDatasource
+    DataSet = SQLQuery1
+    left = 64
+    top = 98
+  end
+  object SQLQuery1: TSQLQuery
+    FieldDefs = <>
+    Params = <>
+    left = 128
+    top = 98
+  end
+end

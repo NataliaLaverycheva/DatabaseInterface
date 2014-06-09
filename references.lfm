@@ -1,0 +1,127 @@
+object References: TReferences
+  Left = 105
+  Height = 686
+  Top = 330
+  Width = 1188
+  BorderIcons = [biSystemMenu, biMinimize]
+  Caption = 'References'
+  ClientHeight = 686
+  ClientWidth = 1188
+  LCLVersion = '1.0.12.0'
+  object DBGrid: TDBGrid
+    Cursor = crDrag
+    Left = 0
+    Height = 686
+    Top = 0
+    Width = 655
+    HelpType = htKeyword
+    Align = alClient
+    Color = clWindow
+    Columns = <>
+    DataSource = Datasource
+    HeaderPushZones = []
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+    ShowHint = True
+    TabOrder = 0
+    OnDblClick = DBGridDblClick
+    OnTitleClick = DBGridTitleClick
+  end
+  object Panel: TPanel
+    Left = 655
+    Height = 686
+    Top = 0
+    Width = 533
+    Align = alRight
+    ClientHeight = 686
+    ClientWidth = 533
+    TabOrder = 1
+    object FilterPanel: TPanel
+      Left = 1
+      Height = 39
+      Top = 1
+      Width = 531
+      Align = alTop
+      BevelOuter = bvNone
+      ClientHeight = 39
+      ClientWidth = 531
+      ParentBidiMode = False
+      TabOrder = 0
+      object BtnAddFilter: TSpeedButton
+        Left = 4
+        Height = 23
+        Top = 9
+        Width = 115
+        Caption = 'Добавить фильтр'
+        NumGlyphs = 0
+        OnClick = BtnAddFilterClick
+      end
+      object BtnExecute: TSpeedButton
+        Left = 124
+        Height = 23
+        Top = 9
+        Width = 115
+        Caption = 'Применить фильтр'
+        NumGlyphs = 0
+        OnClick = BtnExecuteClick
+      end
+      object LogicalConnective: TComboBox
+        Left = 244
+        Height = 23
+        Top = 9
+        Width = 70
+        ItemHeight = 15
+        ItemIndex = 0
+        Items.Strings = (
+          'AND'
+          'OR'
+        )
+        ParentBidiMode = False
+        Style = csDropDownList
+        TabOrder = 0
+        Text = 'AND'
+      end
+      object BtnDelete: TSpeedButton
+        Left = 319
+        Height = 23
+        Top = 9
+        Width = 68
+        Caption = 'Удалить '
+        NumGlyphs = 0
+        OnClick = BtnDeleteClick
+      end
+      object BtnAddRec: TSpeedButton
+        Tag = 1
+        Left = 389
+        Height = 23
+        Top = 9
+        Width = 68
+        Caption = 'Добавить'
+        NumGlyphs = 0
+        OnClick = BtnAddEditForm
+      end
+      object BtnChangeRec: TSpeedButton
+        Tag = 2
+        Left = 459
+        Height = 23
+        Top = 9
+        Width = 68
+        Caption = 'Изменить'
+        NumGlyphs = 0
+        OnClick = BtnAddEditForm
+      end
+    end
+  end
+  object SQLQuery: TSQLQuery
+    FieldDefs = <>
+    Database = ConnectForm.IBConnection
+    Transaction = ConnectForm.SQLTransaction
+    Params = <>
+    left = 8
+    top = 14
+  end
+  object Datasource: TDatasource
+    DataSet = SQLQuery
+    left = 50
+    top = 15
+  end
+end
