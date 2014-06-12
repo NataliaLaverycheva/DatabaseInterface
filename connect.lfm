@@ -16,7 +16,7 @@ object ConnectForm: TConnectForm
   object IBConnection: TIBConnection
     Connected = False
     LoginPrompt = False
-    DatabaseName = 'C:\Users\1\Desktop\database\SCHEDULE.FDB'
+    DatabaseName = 'C:\Users\1\Desktop\DatabaseInterface\SCHEDULE.FDB'
     KeepConnection = False
     Password = 'masterkey'
     Transaction = SQLTransaction

@@ -138,6 +138,8 @@ begin
     Close;
     SQL.Text := Format('delete from %s where id = %d', [Table.TableName, delId]);
     ExecSQL;
+    SQL.Text := Table.MakeQuery;
+    Open;
   end;
   UpdateData(nil);
 end;

@@ -49,15 +49,18 @@ type
     procedure GetCheckGroupShowFieldsName;
     procedure GetXData;
     procedure GetYData;
-    function CountTakeField: integer;
     procedure FillCheckGroupTrue;
     procedure GetLogicalConnective;
+    function CountTakeField: integer;
+    function GetStrToShow(i, j, k, l: integer): string;
+  const orderby: array[0..6] of string = ('NAME', 'NAME', 'NAME',
+    'NAME', 'ID', 'NAME', 'NAME');
     { private declarations }
   public
     Table: TTableInfo;
     procedure ShowTimeTable;
     procedure TakeData(Ind: integer; f: boolean);
-    procedure SelectRec();
+    procedure SelectRec;
     { public declarations }
   end;
 
@@ -78,8 +81,8 @@ begin
   with DrawGrid do begin
     ColCount := Length(x) + 1;
     RowCount := Length(y) + 1;
-    DefaultColWidth := 155;
-    DefaultRowHeight := 85;
+    DefaultColWidth := 180;
+    DefaultRowHeight := 180;
   end;
   SetLength(rec, 0, 0, 0 , 0);
   SelectRec;
@@ -118,28 +121,42 @@ end;
 
 procedure TT.DrawTitle(ACol, ARow: integer; ARect: TRect);
 begin
-  if aRow = 0 then DrawGrid.Canvas.TextOut(ARect.Left + 5, ARect.Top + 5, x[aCol - 1])
-    else DrawGrid.Canvas.TextOut(ARect.Left + 5, ARect.Top + 2, y[aRow - 1]);
+  if aRow = 0 then
+    DrawGrid.Canvas.TextOut(ARect.Left + 5, ARect.Top + 5, x[aCol - 1])
+  else
+    DrawGrid.Canvas.TextOut(ARect.Left + 5, ARect.Top + 2, y[aRow - 1]);
 end;
 
 procedure TT.DrawCell(ACol, ARow: integer; ARect: TRect);
 var
-  str: string;
-  i, j, k: integer;
+  i, j, CountShow, Indent: integer;
+  ShowLine: boolean;
 begin
+  CountShow := 0;
+  Indent := 0;
   with DrawGrid.Canvas do begin
+    Pen.Color := clBlack;
+    Pen.Width := 1;
     for i := 0 to High(Rec[ACol - 1, ARow - 1]) do begin
-      k := 0;
+
+      if Rec[ACol - 1, ARow - 1, i, 0] = '' then Continue;
+
       for j := 0 to High(Rec[ACol - 1, ARow - 1, i]) do begin
-        if ShowFName.Checked then
-          str := Table.Fields[j].FieldCaption + ': ' + Rec[ACol - 1, ARow - 1, i, j]
-        else
-          str := Rec[ACol - 1, ARow - 1, i, j];
+        if (i <> 0) and (j = 0) and (CountShow <> 0) then inc(Indent, 10);
         if TakeFieldName.Checked[j] then begin
-          TextOut(aRect.Left + 5, ARect.Top + k * 17, str);
-          inc(k);
+          ShowLine := true;
+          TextOut(aRect.Left + 7, ARect.Top + CountShow * 19 + Indent,
+            GetStrToShow(ACol - 1, ARow - 1, i, j));
+        inc(CountShow);
         end;
       end;
+
+      if ShowLine then begin
+      inc(Indent, 10);
+      Line(ARect.Left + 25, ARect.Top + CountShow * 19 + Indent,
+        ARect.Right - 25, ARect.Top + CountShow * 19 + Indent);
+      end;
+
     end;
   end;
 end;
@@ -192,6 +209,14 @@ begin
     if TakeFieldName.Checked[i] then inc(Result);
 end;
 
+function TT.GetStrToShow(i, j, k, l: integer): string;
+begin
+  if ShowFName.Checked then
+    Result := Table.Fields[l].FieldCaption + ': ' + Rec[i, j, k, l]
+  else
+    Result := Rec[i, j, k, l];
+end;
+
 procedure TT.FillCheckGroupTrue;
 var
   i: integer;
@@ -214,7 +239,7 @@ var
   i: integer;
 begin
   Caption := 'Расписание';
-  for i := 1 to High(Table.Fields) do begin
+  for i := 1 to High(Table.Fields) - 1 do begin
     XCoord.Items.Add(Table.Fields[i].FieldCaption);
     YCoord.Items.Add(Table.Fields[i].FieldCaption);
   end;
@@ -227,18 +252,13 @@ begin
 end;
 
 procedure TT.TakeData(Ind: integer; f: boolean);
-const
-  value: array[0..2] of string = ('0', '1', '2');
 var
   A: array of string;
 begin
-  if Ind = 7 then begin
-    if f then x := value else y := value;
-    Exit;
-  end;
   with SQLQuery do begin
     Close;
-    SQL.Text := 'SELECT NAME FROM ' + Table.Fields[Ind + 1].KeyTable;
+    SQL.Text := 'SELECT NAME FROM ' + Table.Fields[Ind + 1].KeyTable +
+      ' ORDER BY ' + orderby[Ind];
     Open;
     First;
     while not EOF do begin
@@ -261,8 +281,8 @@ begin
   k := 0;
   with SQLQuery do begin
     Close;
-    SQL.Text := Table.MakeQuery + ' ORDER BY ' + xTable.TableName + '.ID, ' +
-      yTable.TableName + '.ID';
+    SQL.Text := Format('%s ORDER BY %s.%s, %s.%s', [Table.MakeQuery,
+      xTable.TableName, orderby[xIndex], yTable.TableName, orderby[yIndex]]);
     Open;
     First;
     SetLength(Rec, Length(x), Length(y));

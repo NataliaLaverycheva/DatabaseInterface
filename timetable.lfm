@@ -1,7 +1,7 @@
 object T: TT
-  Left = 169
+  Left = 41
   Height = 682
-  Top = 172
+  Top = 342
   Width = 1158
   BorderStyle = bsDialog
   Caption = 'T'
@@ -75,11 +75,10 @@ object T: TT
     end
   end
   object DrawGrid: TDrawGrid
-    Left = 442
-    Height = 605
-    Top = 100
-    Width = 927
-    ExtendedSelect = False
+    Left = 443
+    Height = 567
+    Top = 115
+    Width = 715
     TabOrder = 1
     OnDrawCell = DrawGridDrawCell
   end
