@@ -79,6 +79,7 @@ object T: TT
     Height = 567
     Top = 115
     Width = 715
+    ExtendedSelect = False
     TabOrder = 1
     OnDrawCell = DrawGridDrawCell
   end
@@ -128,6 +129,7 @@ object T: TT
         Width = 115
         Caption = 'Применить фильтр'
         NumGlyphs = 0
+        OnClick = BtnExecuteFilterClick
       end
       object LogicalConnective: TComboBox
         Left = 345

@@ -31,6 +31,7 @@ type
     FieldPanel: TPanel;
     TakeFieldName: TCheckGroup;
     procedure BtnAddFilterClick(Sender: TObject);
+    procedure BtnExecuteFilterClick(Sender: TObject);
     procedure DrawGridDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
     procedure ShowFNameChange(Sender: TObject);
@@ -112,6 +113,11 @@ begin
   if High(FilterList.Filters) > 14 then
     exit;
   FilterList.Add(-1, FilterPanel);
+end;
+
+procedure TT.BtnExecuteFilterClick(Sender: TObject);
+begin
+  ShowSchedClick;
 end;
 
 procedure TT.ShowFNameChange(Sender: TObject);
@@ -281,8 +287,10 @@ begin
   k := 0;
   with SQLQuery do begin
     Close;
-    SQL.Text := Format('%s ORDER BY %s.%s, %s.%s', [Table.MakeQuery,
-      xTable.TableName, orderby[xIndex], yTable.TableName, orderby[yIndex]]);
+    SQL.Text := Format('%s ORDER BY %s.%s, %s.%s', [
+      FilterList.GetQuery(LogicalConnective.Text), xTable.TableName,
+      orderby[xIndex], yTable.TableName, orderby[yIndex]]);
+    FilterList.SetParams(SQLQuery);
     Open;
     First;
     SetLength(Rec, Length(x), Length(y));

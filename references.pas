@@ -27,6 +27,7 @@ type
   TFilterList = class
     Filters: array of TFilter;
     TableInfo: TTableInfo;
+    function GetQuery(LogCon: string): string;
     procedure Add(AId: integer = -1; AFilterPanel: TPanel = nil);
     procedure SetParams(AQuery: TSQLQuery);
     function Where(ALogCon: string): String;
@@ -226,6 +227,11 @@ begin
 end;
 
 { TFilterList }
+
+function TFilterList.GetQuery(LogCon: string): string;
+begin
+  Result := TableInfo.MakeQuery + Where(LogCon);
+end;
 
 procedure TFilterList.Add(AId: integer; AFilterPanel: TPanel);
 var
