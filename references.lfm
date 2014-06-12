@@ -5,8 +5,8 @@ object References: TReferences
   Width = 1188
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'References'
-  ClientHeight = 686
-  ClientWidth = 1188
+  ClientHeight = 0
+  ClientWidth = 0
   LCLVersion = '1.0.12.0'
   object DBGrid: TDBGrid
     Cursor = crDrag

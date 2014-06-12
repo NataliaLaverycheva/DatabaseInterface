@@ -5,8 +5,8 @@ object T: TT
   Width = 1158
   BorderStyle = bsDialog
   Caption = 'T'
-  ClientHeight = 682
-  ClientWidth = 1158
+  ClientHeight = 0
+  ClientWidth = 0
   LCLVersion = '1.0.12.0'
   object FieldPanel: TPanel
     Left = 442
@@ -82,6 +82,7 @@ object T: TT
     ExtendedSelect = False
     TabOrder = 1
     OnDrawCell = DrawGridDrawCell
+    OnMouseMove = DrawGridMouseMove
   end
   object FilterPanel: TPanel
     Left = 0
@@ -98,6 +99,7 @@ object T: TT
       Top = 1
       Width = 443
       Align = alTop
+      BevelOuter = bvNone
       ClientHeight = 44
       ClientWidth = 443
       TabOrder = 0

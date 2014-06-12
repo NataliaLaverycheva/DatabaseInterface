@@ -10,6 +10,14 @@ uses
 
 type
 
+  { TEditPanel }
+
+  TEditPanel = class
+    Panel: TPanel;
+    BtnDelete, BtnInsert, BtnOpen: TSpeedButton;
+    procedure GetEditPanel(ADrawGrid: TDrawGrid; ARect: TRect);
+  end;
+
   { TT }
 
   TT = class(TForm)
@@ -34,6 +42,8 @@ type
     procedure BtnExecuteFilterClick(Sender: TObject);
     procedure DrawGridDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
+    procedure DrawGridMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
     procedure ShowFNameChange(Sender: TObject);
     procedure ShowSchedClick;
     procedure TakeFieldNameItemClick(Sender: TObject; Index: integer);
@@ -45,6 +55,8 @@ type
     xTable, yTable: TTableInfo;
     xIndex, yIndex: integer;
     FilterList: TFilterList;
+    EditPanel: TEditPanel;
+    ColEdit, RowEdit: integer;
     procedure DrawTitle(ACol, ARow: integer; ARect: TRect);
     procedure DrawCell(ACol, ARow: integer; ARect: TRect);
     procedure GetCheckGroupShowFieldsName;
@@ -54,6 +66,7 @@ type
     procedure GetLogicalConnective;
     function CountTakeField: integer;
     function GetStrToShow(i, j, k, l: integer): string;
+    procedure DeleteDataFromCell(Sender: TObject);
   const orderby: array[0..6] of string = ('NAME', 'NAME', 'NAME',
     'NAME', 'ID', 'NAME', 'NAME');
     { private declarations }
@@ -69,6 +82,29 @@ var
   T: TT;
 
 implementation
+
+{ TEditPanel }
+
+procedure TEditPanel.GetEditPanel(ADrawGrid: TDrawGrid; ARect: TRect);
+begin
+  with Panel do begin
+    Parent := ADrawGrid;
+    Height := 25;
+    Top := ARect.Bottom - 26;
+    Left := ARect.Left + 5;
+    BevelOuter := bvNone;
+  end;
+  BtnDelete := TSpeedButton.Create(Panel);
+  with BtnDelete do begin
+    Parent := Panel;
+    Top := 3;
+    Left := 5;
+    Caption := 'Удалить';
+    Height := 20;
+    Width := 48;
+    OnClick := @T.DeleteDataFromCell;
+  end;
+end;
 
 {$R *.lfm}
 
@@ -106,6 +142,23 @@ begin
     Exit;
   end;
   DrawCell(aCol, aRow, aRect);
+end;
+
+procedure TT.DrawGridMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+var
+  Col, Row: integer;
+  Rect: TRect;
+begin
+  Col := 0;
+  Row := 0;
+  FreeAndNil(EditPanel.Panel);
+  EditPanel.Panel := TPanel.Create(DrawGrid);
+  DrawGrid.MouseToCell(x, y, Col, Row);
+  ColEdit := Col;
+  RowEdit := Row;
+  Rect := DrawGrid.CellRect(Col, Row);
+  EditPanel.GetEditPanel(DrawGrid, Rect);
 end;
 
 procedure TT.BtnAddFilterClick(Sender: TObject);
@@ -223,6 +276,19 @@ begin
     Result := Rec[i, j, k, l];
 end;
 
+procedure TT.DeleteDataFromCell(Sender: TObject);
+var
+  i: integer;
+begin
+  if MessageDlg('Вы действительно хотите удалить все записи в этой ячейке?',
+    mtConfirmation, mbYesNo, 0) <> mrYes then exit;
+  for i := 0 to High(Rec[ColEdit - 1, RowEdit - 1]) do
+    DeleteRec(SQLQuery, StrToInt(Rec[ColEdit - 1, RowEdit - 1, i, 0]), Table);
+  SQLQuery.ApplyUpdates;
+  Connect.ConnectForm.SQLTransaction.Commit;
+  ShowSchedClick;
+end;
+
 procedure TT.FillCheckGroupTrue;
 var
   i: integer;
@@ -253,6 +319,7 @@ begin
   YCoord.Caption := Table.Fields[5].FieldCaption;
   GetLogicalConnective;
   FilterList := TFilterList.Create(Table);
+  EditPanel := TEditPanel.Create;
   ShowSchedClick;
   Show;
 end;

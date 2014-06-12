@@ -60,7 +60,6 @@ type
     EditForms: array of TEditForm;
     procedure Refresh;
     function OrderBy: String;
-    procedure DeleteRec;
     procedure UpdateData(Sender: TObject);
   public
     Id: integer;
@@ -72,6 +71,7 @@ type
 
 var
   FReferences: array of TReferences;
+  procedure DeleteRec(ASQLQuery: TSQLQuery; delId: integer; ATable: TTableInfo);
 
 implementation
 
@@ -127,22 +127,15 @@ begin
     Result += ' DESC';
 end;
 
-procedure TReferences.DeleteRec;
-var
-  delId: integer;
+procedure DeleteRec(ASQLQuery: TSQLQuery; delId: integer; ATable: TTableInfo);
 begin
-  if MessageDlg('Вы действительно хотите удалить запись?',
-    mtConfirmation, mbYesNo, 0) <> mrYes
-  then exit;
-  delId := DBGrid.DataSource.DataSet.FieldByName('ID').AsInteger;
-  with SQLQuery do begin
+  with ASQLQuery do begin
     Close;
-    SQL.Text := Format('delete from %s where id = %d', [Table.TableName, delId]);
+    SQL.Text := Format('delete from %s where id = %d', [ATable.TableName, delId]);
     ExecSQL;
-    SQL.Text := Table.MakeQuery;
+    SQL.Text := ATable.MakeQuery;
     Open;
   end;
-  UpdateData(nil);
 end;
 
 procedure TReferences.ShowTable(ATable: TTableInfo);
@@ -216,8 +209,14 @@ begin
 end;
 
 procedure TReferences.BtnDeleteClick(Sender: TObject);
+var
+  delId: integer;
 begin
-  DeleteRec;
+  if MessageDlg('Вы действительно хотите удалить запись?',
+    mtConfirmation, mbYesNo, 0) <> mrYes then exit;
+  delId := DBGrid.DataSource.DataSet.FieldByName('ID').AsInteger;
+  DeleteRec(SQLQuery, delId, Table);
+  UpdateData(nil);
 end;
 
 { TFilter }
