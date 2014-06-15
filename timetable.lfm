@@ -1,15 +1,14 @@
 object T: TT
-  Left = 41
+  Left = 0
   Height = 682
-  Top = 342
-  Width = 1158
-  BorderStyle = bsDialog
+  Top = 330
+  Width = 1172
   Caption = 'T'
-  ClientHeight = 0
-  ClientWidth = 0
+  ClientHeight = 682
+  ClientWidth = 1172
   LCLVersion = '1.0.12.0'
   object FieldPanel: TPanel
-    Left = 442
+    Left = 456
     Height = 682
     Top = 0
     Width = 716
@@ -75,11 +74,12 @@ object T: TT
     end
   end
   object DrawGrid: TDrawGrid
-    Left = 443
+    Left = 441
     Height = 567
     Top = 115
-    Width = 715
+    Width = 731
     ExtendedSelect = False
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSizing, goColSizing, goSmoothScroll]
     TabOrder = 1
     OnDrawCell = DrawGridDrawCell
     OnMouseMove = DrawGridMouseMove

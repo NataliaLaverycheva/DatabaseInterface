@@ -57,11 +57,11 @@ type
     procedure BtnDeleteClick(Sender: TObject);
   private
     FilterList: TFilterList;
-    EditForms: array of TEditForm;
     procedure Refresh;
     function OrderBy: String;
     procedure UpdateData(Sender: TObject);
   public
+    EditForms: array of TEditForm;
     Id: integer;
     FSortIndex: Integer;
     FSortDir: boolean;

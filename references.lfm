@@ -1,8 +1,8 @@
 object References: TReferences
-  Left = 75
+  Left = 0
   Height = 686
-  Top = 495
-  Width = 1188
+  Top = 29
+  Width = 1064
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'References'
   ClientHeight = 0
@@ -13,7 +13,7 @@ object References: TReferences
     Left = 0
     Height = 686
     Top = 0
-    Width = 655
+    Width = 531
     HelpType = htKeyword
     Align = alClient
     Color = clWindow
@@ -27,7 +27,7 @@ object References: TReferences
     OnTitleClick = DBGridTitleClick
   end
   object Panel: TPanel
-    Left = 655
+    Left = 531
     Height = 686
     Top = 0
     Width = 533

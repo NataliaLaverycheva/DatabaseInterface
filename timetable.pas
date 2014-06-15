@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  DBGrids, StdCtrls, Buttons, Grids, sqldb, db, MetaData, References, Connect;
+  DBGrids, StdCtrls, Buttons, Grids, sqldb, db, MetaData, References, Connect,
+  Editing;
 
 type
 
@@ -57,6 +58,8 @@ type
     FilterList: TFilterList;
     EditPanel: TEditPanel;
     ColEdit, RowEdit: integer;
+    EditForm: TEditForm;
+    References: array of TReferences;
     procedure DrawTitle(ACol, ARow: integer; ARect: TRect);
     procedure DrawCell(ACol, ARow: integer; ARect: TRect);
     procedure GetCheckGroupShowFieldsName;
@@ -67,6 +70,8 @@ type
     function CountTakeField: integer;
     function GetStrToShow(i, j, k, l: integer): string;
     procedure DeleteDataFromCell(Sender: TObject);
+    procedure InsertDataAtCell(Sender: TObject);
+    procedure OpenReferencesForm(Sender: TObject);
   const orderby: array[0..6] of string = ('NAME', 'NAME', 'NAME',
     'NAME', 'ID', 'NAME', 'NAME');
     { private declarations }
@@ -98,11 +103,31 @@ begin
   with BtnDelete do begin
     Parent := Panel;
     Top := 3;
-    Left := 5;
+    Left := 3;
     Caption := 'Удалить';
     Height := 20;
     Width := 48;
     OnClick := @T.DeleteDataFromCell;
+  end;
+  BtnInsert := TSpeedButton.Create(Panel);
+  with BtnInsert do begin
+    Parent := Panel;
+    Top := 3;
+    Left := 55;
+    Caption := 'Добавить';
+    Height := 20;
+    Width := 56;
+    OnClick := @T.InsertDataAtCell;
+  end;
+  BtnOpen := TSpeedButton.Create(Panel);
+  with BtnOpen do begin
+    Parent := Panel;
+    Top := 3;
+    Left := 114;
+    Caption := 'Открыть';
+    Height := 20;
+    Width := 56;
+    OnClick := @T.OpenReferencesForm;
   end;
 end;
 
@@ -153,10 +178,11 @@ begin
   Col := 0;
   Row := 0;
   FreeAndNil(EditPanel.Panel);
-  EditPanel.Panel := TPanel.Create(DrawGrid);
   DrawGrid.MouseToCell(x, y, Col, Row);
+  if (Col = 0) or (Row = 0) then Exit;
   ColEdit := Col;
   RowEdit := Row;
+  EditPanel.Panel := TPanel.Create(DrawGrid);
   Rect := DrawGrid.CellRect(Col, Row);
   EditPanel.GetEditPanel(DrawGrid, Rect);
 end;
@@ -188,10 +214,11 @@ end;
 
 procedure TT.DrawCell(ACol, ARow: integer; ARect: TRect);
 var
-  i, j, CountShow, Indent: integer;
+  i, j, CountStrShow, RecShow, Indent: integer;
   ShowLine: boolean;
 begin
-  CountShow := 0;
+  CountStrShow := 0;
+  RecShow := 0;
   Indent := 0;
   with DrawGrid.Canvas do begin
     Pen.Color := clBlack;
@@ -199,24 +226,29 @@ begin
     for i := 0 to High(Rec[ACol - 1, ARow - 1]) do begin
 
       if Rec[ACol - 1, ARow - 1, i, 0] = '' then Continue;
+      Inc(RecShow);
 
       for j := 0 to High(Rec[ACol - 1, ARow - 1, i]) do begin
-        if (i <> 0) and (j = 0) and (CountShow <> 0) then inc(Indent, 10);
+        if (i <> 0) and (j = 0) and (CountStrShow <> 0) then inc(Indent, 10);
         if TakeFieldName.Checked[j] then begin
           ShowLine := true;
-          TextOut(aRect.Left + 7, ARect.Top + CountShow * 19 + Indent,
+          TextOut(aRect.Left + 7, ARect.Top + CountStrShow * 19 + Indent,
             GetStrToShow(ACol - 1, ARow - 1, i, j));
-        inc(CountShow);
+          inc(CountStrShow);
         end;
       end;
 
       if ShowLine then begin
-      inc(Indent, 10);
-      Line(ARect.Left + 25, ARect.Top + CountShow * 19 + Indent,
-        ARect.Right - 25, ARect.Top + CountShow * 19 + Indent);
+        inc(Indent, 10);
+        Line(
+          ARect.Left + 25, ARect.Top + CountStrShow * 19 + Indent,
+          ARect.Right - 25, ARect.Top + CountStrShow * 19 + Indent);
       end;
-
     end;
+
+    if RecShow > 1 then
+      Rectangle(ARect.BottomRight.x - 15, ARect.BottomRight.y - 15,
+        ARect.BottomRight.x, ARect.BottomRight.y);
   end;
 end;
 
@@ -287,6 +319,18 @@ begin
   SQLQuery.ApplyUpdates;
   Connect.ConnectForm.SQLTransaction.Commit;
   ShowSchedClick;
+end;
+
+procedure TT.InsertDataAtCell(Sender: TObject);
+begin
+  EditForm := TEditForm.Create(nil);
+  EditForm.GetEditForm(Table, 0, nil);
+  EditForm.Show;
+end;
+
+procedure TT.OpenReferencesForm(Sender: TObject);
+begin
+
 end;
 
 procedure TT.FillCheckGroupTrue;
@@ -363,10 +407,9 @@ begin
     SetLength(Rec, Length(x), Length(y));
     i := 0;
     j := 0;
-    while not EOF do begin
+    while not EOF and ((j <= High(x)) or (i <= High(y))) do begin
       CondX := Fields[xIndex + 1].AsString = x[i];
       CondY := Fields[yIndex + 1].AsString = y[j];
-      if (j > High(x)) and (i > High(y)) then Exit;
       if CondX and CondY then begin
         inc(k);
         SetLength(Rec[i, j], k, High(Table.Fields) + 1);
@@ -377,9 +420,9 @@ begin
         inc(j);
         k := 0;
       end else begin
-            inc(i);
-            j := 0;
-          end;
+        inc(i);
+        j := 0;
+      end;
     end;
   end;
 end;

@@ -1,7 +1,7 @@
 object ConnectForm: TConnectForm
-  Left = 296
+  Left = 300
   Height = 120
-  Top = 34
+  Top = 37
   Width = 203
   Caption = 'ConnectForm'
   OnCreate = FormCreate

@@ -1,7 +1,7 @@
 object EditForm: TEditForm
-  Left = 809
+  Left = 1086
   Height = 422
-  Top = 86
+  Top = 128
   Width = 428
   Caption = 'Карточка'
   ClientHeight = 422
@@ -28,18 +28,25 @@ object EditForm: TEditForm
   object Panel: TPanel
     Left = 5
     Height = 375
-    Top = 45
+    Top = 50
     Width = 418
     ParentBidiMode = False
     TabOrder = 0
   end
-  object Datasource1: TDatasource
-    DataSet = SQLQuery1
+  object Datasource: TDatasource
+    DataSet = SQLQuery
+    OnDataChange = DatasourceDataChange
     left = 64
     top = 98
   end
-  object SQLQuery1: TSQLQuery
+  object SQLQuery: TSQLQuery
     FieldDefs = <>
+    UpdateSQL.Strings = (
+      'update'
+    )
+    InsertSQL.Strings = (
+      'insert'
+    )
     Params = <>
     left = 128
     top = 98

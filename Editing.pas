@@ -21,13 +21,12 @@ type
   TEditForm = class(TForm)
     BtnDel: TSpeedButton;
     BtnSave: TSpeedButton;
-    Datasource1: TDatasource;
+    Datasource: TDatasource;
     Panel: TPanel;
-    SQLQuery1: TSQLQuery;
+    SQLQuery: TSQLQuery;
     procedure BtnDelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
-    procedure GetEditForm(
-      ATable: TTableInfo; AId: integer; AOnChange: TNotifyEvent);
+    procedure DatasourceDataChange(Sender: TObject; Field: TField);
   private
     TableInfo: TTableInfo;
     rec: array of TEditField;
@@ -38,6 +37,8 @@ type
     procedure DeleteQuotes(var s: string);
     procedure SetParams(AQuery: TSQLQuery);
   public
+    procedure GetEditForm(
+      ATable: TTableInfo; AId: integer; AOnChange: TNotifyEvent);
     property Id: Integer read FId;
   end;
 
@@ -62,12 +63,13 @@ begin
   TableInfo := ATable;
   FOnChange:= AOnChange;
   Caption := TableInfo.TableCaption;
-  SQLQuery1.DataBase := ConnectForm.IBConnection;
-  SQLQuery1.Transaction := ConnectForm.SQLTransaction;
-  SQLQuery1.SQL.Text := TableInfo.MakeQuery(true) +
+  SQLQuery.DataBase := ConnectForm.IBConnection;
+  SQLQuery.Transaction := ConnectForm.SQLTransaction;
+  SQLQuery.SQL.Text := TableInfo.MakeQuery(true) +
     ' WHERE ' + TableInfo.TableName + '.id = :id';
-  SQLQuery1.ParamByName('id').AsInteger := FId;
-  SQLQuery1.Open;
+  SQLQuery.ParamByName('id').AsInteger := FId;
+  SQLQuery.Open;
+  SQLQuery.Edit;
 
   SetLength(rec, Length(TableInfo.Fields));
   for i := 1 to high(TableInfo.Fields) do begin
@@ -87,9 +89,9 @@ begin
     if TableInfo.Fields[i].KeyField = '' then begin
       rec[i].Text := TEdit.Create(Self.Panel);
       with rec[i].Text do begin
-        s := SQLQuery1.FieldByName(fn).AsString;
+        s := SQLQuery.FieldByName(fn).AsString;
         if Id > 0 then
-          Text := SQLQuery1.FieldByName(fn).AsString;
+          Text := SQLQuery.FieldByName(fn).AsString;
         Parent := Self.Panel;
         Top := i * 40;
         Width := 115;
@@ -97,25 +99,24 @@ begin
         ReadOnly := False;
       end;
     end else begin
-      LookupQuery := TSQLQuery.Create(Self);
-      LookupDataSource := TDataSource.Create(Self);
-      rec[i].box := TDBLookupComboBox.Create(Self.Panel);
       AFieldName := TableInfo.Fields[i].KeyField;
       DeleteQuotes(AFieldName);
+      LookupQuery := TSQLQuery.Create(Self);
       with LookupQuery do begin
         DataBase := ConnectForm.IBConnection;
         Transaction := ConnectForm.SQLTransaction;
-        Close;
         SQL.Text := 'select * from ' + TableInfo.Fields[i].KeyTable;
         Open;
       end;
+      LookupDataSource := TDataSource.Create(Self);
       LookupDataSource.DataSet := LookupQuery;
+      rec[i].box := TDBLookupComboBox.Create(Self.Panel);
       with rec[i].box do begin
         Parent := Self.Panel;
         Top := i * 40;
         Width := 115;
         Left := 210;
-        DataSource := DataSource1;
+        DataSource := Self.DataSource;
         DataField := fn;
         ListSource := LookupDataSource;
         KeyField := AFieldName;
@@ -165,7 +166,7 @@ begin
     if TableInfo.Fields[i].KeyField = '' then
       p.AsString := rec[i].Text.Text
     else
-      p.AsInteger := SQLQuery1.FieldByName(TableInfo.Fields[i].FieldName).AsInteger;
+      p.AsInteger := SQLQuery.FieldByName(TableInfo.Fields[i].FieldName).AsInteger;
   end;
 end;
 
@@ -175,7 +176,10 @@ var
   i: integer;
   editQuery: TSQLQuery;
 begin
-  if Id = 0 then s := InsertQuery else s := UpdateQuery;
+  if Id = 0 then
+    s := InsertQuery
+  else
+    s := UpdateQuery;
   editQuery := TSQLQuery.Create(nil);
   with editQuery do begin
     DataBase := ConnectForm.IBConnection;
@@ -185,8 +189,13 @@ begin
     ExecSQL;
     Free;
   end;
-  FOnChange(Self);
+  FOnChange(self);
   Close;
+end;
+
+procedure TEditForm.DatasourceDataChange(Sender: TObject; Field: TField);
+begin
+
 end;
 
 procedure TEditForm.BtnDelClick(Sender: TObject);

@@ -17,7 +17,7 @@ begin
   Application.CreateForm(TSchedule, Schedule);
   Application.CreateForm(TConnectForm, ConnectForm);
   Application.CreateForm(TReferences, FReferences);
-  //Application.CreateForm(TEditForm, EditForms);
+  //Application.CreateForm(TEditForm, EditForm);
   Application.CreateForm(TT, T);
   Application.Run;
 end.
