@@ -14,9 +14,9 @@ type
   { TEditPanel }
 
   TEditPanel = class
-    Panel: TPanel;
-    BtnDelete, BtnInsert, BtnOpen: TSpeedButton;
-    procedure GetEditPanel(ADrawGrid: TDrawGrid; ARect: TRect);
+    Panel: array of TPanel;
+    BtnDelete, BtnInsert, BtnUpdate: TSpeedButton;
+    procedure GetEditPanel(ADrawGrid: TDrawGrid; ACol, ARow: integer);
   end;
 
   { TT }
@@ -43,6 +43,8 @@ type
     procedure BtnExecuteFilterClick(Sender: TObject);
     procedure DrawGridDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
+    procedure DrawGridMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure DrawGridMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
     procedure ShowFNameChange(Sender: TObject);
@@ -59,7 +61,6 @@ type
     EditPanel: TEditPanel;
     ColEdit, RowEdit: integer;
     EditForm: TEditForm;
-    References: array of TReferences;
     procedure DrawTitle(ACol, ARow: integer; ARect: TRect);
     procedure DrawCell(ACol, ARow: integer; ARect: TRect);
     procedure GetCheckGroupShowFieldsName;
@@ -71,7 +72,8 @@ type
     function GetStrToShow(i, j, k, l: integer): string;
     procedure DeleteDataFromCell(Sender: TObject);
     procedure InsertDataAtCell(Sender: TObject);
-    procedure OpenReferencesForm(Sender: TObject);
+    procedure UpdateDataAtCell(Sender: TObject);
+    procedure ShowCell(ACol, ARow: integer);
   const orderby: array[0..6] of string = ('NAME', 'NAME', 'NAME',
     'NAME', 'ID', 'NAME', 'NAME');
     { private declarations }
@@ -90,44 +92,51 @@ implementation
 
 { TEditPanel }
 
-procedure TEditPanel.GetEditPanel(ADrawGrid: TDrawGrid; ARect: TRect);
+procedure TEditPanel.GetEditPanel(ADrawGrid: TDrawGrid; ACol, ARow: integer);
+var
+  i, Id: integer;
+  Rect: TRect;
 begin
-  with Panel do begin
-    Parent := ADrawGrid;
-    Height := 25;
-    Top := ARect.Bottom - 26;
-    Left := ARect.Left + 5;
-    BevelOuter := bvNone;
-  end;
-  BtnDelete := TSpeedButton.Create(Panel);
-  with BtnDelete do begin
-    Parent := Panel;
-    Top := 3;
-    Left := 3;
-    Caption := 'Удалить';
-    Height := 20;
-    Width := 48;
-    OnClick := @T.DeleteDataFromCell;
-  end;
-  BtnInsert := TSpeedButton.Create(Panel);
-  with BtnInsert do begin
-    Parent := Panel;
-    Top := 3;
-    Left := 55;
-    Caption := 'Добавить';
-    Height := 20;
-    Width := 56;
-    OnClick := @T.InsertDataAtCell;
-  end;
-  BtnOpen := TSpeedButton.Create(Panel);
-  with BtnOpen do begin
-    Parent := Panel;
-    Top := 3;
-    Left := 114;
-    Caption := 'Открыть';
-    Height := 20;
-    Width := 56;
-    OnClick := @T.OpenReferencesForm;
+  Rect := ADrawGrid.CellRect(ACol, ARow);
+  for i := 0 to High(Panel) do begin
+    Id := StrToInt(T.Rec[ACol - 1, ARow - 1, i, 0]);
+    with Panel[i] do begin
+      Parent := ADrawGrid;
+      Height := 25;
+      Width := 67;
+      Top := Rect.Top + (i + 1)*110;
+      Left := Rect.Left + 120;
+      BevelOuter := bvNone;
+    end;
+    BtnDelete := TSpeedButton.Create(Panel[i]);
+    with BtnDelete do begin
+      Parent := Panel[i];
+      Tag := Id;
+      Left := 3;
+      Glyph.LoadFromFile(GetCurrentDir + '\ico\deletered_2343.bmp');
+      Height := 20;
+      Width := 20;
+      OnClick := @T.DeleteDataFromCell;
+    end;
+    BtnInsert := TSpeedButton.Create(Panel[i]);
+    with BtnInsert do begin
+      Parent := Panel[i];
+      Left := 25;
+      Glyph.LoadFromFile(GetCurrentDir + '\ico\edit_add_5036.bmp');
+      Height := 20;
+      Width := 20;
+      OnClick := @T.InsertDataAtCell;
+    end;
+    BtnUpdate := TSpeedButton.Create(Panel[i]);
+    with BtnUpdate do begin
+      Parent := Panel[i];
+      Tag := Id;
+      Left := 47;
+      Glyph.LoadFromFile(GetCurrentDir + '\ico\noatunloopsong_6487.bmp');
+      Height := 20;
+      Width := 20;
+      OnClick := @T.UpdateDataAtCell;
+    end;
   end;
 end;
 
@@ -143,8 +152,8 @@ begin
   with DrawGrid do begin
     ColCount := Length(x) + 1;
     RowCount := Length(y) + 1;
-    DefaultColWidth := 180;
-    DefaultRowHeight := 180;
+    DefaultColWidth := 200;
+    DefaultRowHeight := 150;
   end;
   SetLength(rec, 0, 0, 0 , 0);
   SelectRec;
@@ -158,8 +167,6 @@ end;
 
 procedure TT.DrawGridDrawCell(Sender: TObject; aCol, aRow: Integer;
   aRect: TRect; aState: TGridDrawState);
-var
-  i: integer;
 begin
   if (aCol = 0) and (aRow = 0) then Exit;
   if (aCol = 0) xor (aRow = 0) then begin
@@ -169,29 +176,46 @@ begin
   DrawCell(aCol, aRow, aRect);
 end;
 
-procedure TT.DrawGridMouseMove(Sender: TObject; Shift: TShiftState; X,
-  Y: Integer);
+procedure TT.DrawGridMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
 var
   Col, Row: integer;
   Rect: TRect;
 begin
+  DrawGrid.MouseToCell(x, y, Col, Row);
+  Rect := DrawGrid.CellRect(Col, Row);
+  if (Col = 0) or (Row = 0) then Exit;
+  if (x > Rect.BottomRight.x - 15) and (x < Rect.BottomRight.x) and
+  (y > Rect.BottomRight.y - 15) and (y < Rect.BottomRight.y) then
+    ShowCell(Col, Row);
+end;
+
+procedure TT.DrawGridMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+var
+  Col, Row, i: integer;
+  Rect: TRect;
+begin
   Col := 0;
   Row := 0;
-  FreeAndNil(EditPanel.Panel);
   DrawGrid.MouseToCell(x, y, Col, Row);
+  for i := 0 to High(EditPanel.Panel) do
+    FreeAndNil(EditPanel.Panel[i]);
+  SetLength(EditPanel.Panel, 0);
   if (Col = 0) or (Row = 0) then Exit;
   ColEdit := Col;
   RowEdit := Row;
-  EditPanel.Panel := TPanel.Create(DrawGrid);
-  Rect := DrawGrid.CellRect(Col, Row);
-  EditPanel.GetEditPanel(DrawGrid, Rect);
+  SetLength(EditPanel.Panel, Length(Rec[Col - 1, Row - 1]));
+  for i := 0 to High((Rec[Col - 1, Row - 1])) do
+    EditPanel.Panel[i] := TPanel.Create(DrawGrid);
+  EditPanel.GetEditPanel(DrawGrid, Col, Row);
 end;
 
 procedure TT.BtnAddFilterClick(Sender: TObject);
 begin
   if High(FilterList.Filters) > 14 then
     exit;
-  FilterList.Add(-1, FilterPanel);
+  FilterList.Add(FilterPanel);
 end;
 
 procedure TT.BtnExecuteFilterClick(Sender: TObject);
@@ -214,39 +238,35 @@ end;
 
 procedure TT.DrawCell(ACol, ARow: integer; ARect: TRect);
 var
-  i, j, CountStrShow, RecShow, Indent: integer;
-  ShowLine: boolean;
+  i, j, NowHeight, CellHeight, CountStrShow, Indent: integer;
 begin
   CountStrShow := 0;
-  RecShow := 0;
   Indent := 0;
+  CellHeight := DrawGrid.RowHeights[ARow] - 25;
   with DrawGrid.Canvas do begin
     Pen.Color := clBlack;
     Pen.Width := 1;
     for i := 0 to High(Rec[ACol - 1, ARow - 1]) do begin
 
-      if Rec[ACol - 1, ARow - 1, i, 0] = '' then Continue;
-      Inc(RecShow);
-
       for j := 0 to High(Rec[ACol - 1, ARow - 1, i]) do begin
-        if (i <> 0) and (j = 0) and (CountStrShow <> 0) then inc(Indent, 10);
         if TakeFieldName.Checked[j] then begin
-          ShowLine := true;
+          NowHeight := CountStrShow * 19 + Indent;
+          if NowHeight > CellHeight then Break;
           TextOut(aRect.Left + 7, ARect.Top + CountStrShow * 19 + Indent,
             GetStrToShow(ACol - 1, ARow - 1, i, j));
           inc(CountStrShow);
         end;
       end;
 
-      if ShowLine then begin
-        inc(Indent, 10);
-        Line(
-          ARect.Left + 25, ARect.Top + CountStrShow * 19 + Indent,
-          ARect.Right - 25, ARect.Top + CountStrShow * 19 + Indent);
-      end;
+      if NowHeight > CellHeight then Break;
+      inc(Indent, 10);
+      Line(
+        ARect.Left + 25, ARect.Top + CountStrShow * 19 + Indent,
+        ARect.Right - 25, ARect.Top + CountStrShow * 19 + Indent);
+      inc(Indent, 10);
     end;
 
-    if RecShow > 1 then
+    if Length(Rec[ACol - 1, ARow - 1]) > 1 then
       Rectangle(ARect.BottomRight.x - 15, ARect.BottomRight.y - 15,
         ARect.BottomRight.x, ARect.BottomRight.y);
   end;
@@ -328,9 +348,14 @@ begin
   EditForm.Show;
 end;
 
-procedure TT.OpenReferencesForm(Sender: TObject);
+procedure TT.UpdateDataAtCell(Sender: TObject);
 begin
 
+end;
+
+procedure TT.ShowCell(ACol, ARow: integer);
+begin
+  DrawGrid.RowHeights[ARow] := Length(Rec[ACol - 1, ARow - 1])*170;
 end;
 
 procedure TT.FillCheckGroupTrue;
@@ -390,11 +415,8 @@ end;
 procedure TT.SelectRec;
 var
   i, j, k, l: integer;
-  wid, hei: integer;
   CondX, CondY: boolean;
 begin
-  wid := 50;
-  hei := 50;
   k := 0;
   with SQLQuery do begin
     Close;
@@ -407,7 +429,7 @@ begin
     SetLength(Rec, Length(x), Length(y));
     i := 0;
     j := 0;
-    while not EOF and ((j <= High(x)) or (i <= High(y))) do begin
+    while not EOF do begin
       CondX := Fields[xIndex + 1].AsString = x[i];
       CondY := Fields[yIndex + 1].AsString = y[j];
       if CondX and CondY then begin
@@ -416,12 +438,14 @@ begin
         for l := 1 to High(Table.Fields) + 1 do
           Rec[i, j, k - 1, l - 1] := Fields[l - 1].AsString;
         Next;
-      end else if CondX and not CondY then begin
-        inc(j);
-        k := 0;
       end else begin
-        inc(i);
-        j := 0;
+        if CondX and not CondY then
+          inc(j)
+        else begin
+          inc(i);
+          j := 0;
+        end;
+        k := 0;
       end;
     end;
   end;

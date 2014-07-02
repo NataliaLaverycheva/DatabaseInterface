@@ -1,7 +1,7 @@
 object T: TT
-  Left = 59
+  Left = 34
   Height = 682
-  Top = 138
+  Top = 267
   Width = 1172
   Caption = 'T'
   ClientHeight = 682
@@ -80,9 +80,10 @@ object T: TT
       Align = alBottom
       BorderStyle = bsNone
       ExtendedSelect = False
-      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSizing, goColSizing, goSmoothScroll]
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSizing, goColSizing]
       TabOrder = 3
       OnDrawCell = DrawGridDrawCell
+      OnMouseDown = DrawGridMouseDown
       OnMouseMove = DrawGridMouseMove
     end
   end
@@ -133,7 +134,6 @@ object T: TT
         Width = 115
         Caption = 'Применить фильтр'
         NumGlyphs = 0
-        OnClick = BtnExecuteFilterClick
       end
       object LogicalConnective: TComboBox
         Left = 345

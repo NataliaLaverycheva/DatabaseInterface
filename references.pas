@@ -28,7 +28,7 @@ type
     Filters: array of TFilter;
     TableInfo: TTableInfo;
     function GetQuery(LogCon: string): string;
-    procedure Add(AId: integer = -1; AFilterPanel: TPanel = nil);
+    procedure Add(AFilterPanel: TPanel);
     procedure SetParams(AQuery: TSQLQuery);
     function Where(ALogCon: string): String;
     procedure BtnDeleteFilterClick(Sender: TObject);
@@ -150,7 +150,7 @@ procedure TReferences.BtnAddFilterClick(Sender: TObject);
 begin
   if High(FilterList.Filters) > 14 then
     exit;
-  FilterList.Add(Id);
+  FilterList.Add(FReferences[Id].Panel);
 end;
 
 procedure TReferences.BtnAddEditForm(Sender: TObject);
@@ -232,16 +232,13 @@ begin
   Result := TableInfo.MakeQuery + Where(LogCon);
 end;
 
-procedure TFilterList.Add(AId: integer; AFilterPanel: TPanel);
+procedure TFilterList.Add(AFilterPanel: TPanel);
 var
   v: String;
   j: Integer;
   ParentPanel, t: TPanel;
 begin
-  if AId = -1 then
-    ParentPanel := AFilterPanel
-  else
-    ParentPanel := FReferences[AId].Panel;
+  ParentPanel := AFilterPanel;
   SetLength(Filters, Length(Filters) + 1);
   Filters[High(Filters)] := TFilter.Create();
 
