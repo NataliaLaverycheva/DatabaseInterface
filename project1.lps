@@ -50,7 +50,7 @@
         <UnitName Value="MetaData"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="146"/>
+        <TopLine Value="145"/>
         <CursorPos X="15" Y="18"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -125,7 +125,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="7"/>
         <CursorPos X="10" Y="12"/>
-        <UsageCount Value="147"/>
+        <UsageCount Value="148"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit8>
@@ -135,82 +135,83 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="5" Y="2"/>
-        <UsageCount Value="68"/>
+        <UsageCount Value="69"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit9>
       <Unit10>
+        <Filename Value="conflicts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ConflictForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Conflicts"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="44"/>
+        <CursorPos X="32" Y="65"/>
+        <UsageCount Value="25"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit10>
+      <Unit11>
         <Filename Value="C:\lazarus\lcl\include\control.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3228"/>
         <CursorPos X="1" Y="3246"/>
         <UsageCount Value="6"/>
-      </Unit10>
-      <Unit11>
+      </Unit11>
+      <Unit12>
         <Filename Value="C:\lazarus\lcl\include\customform.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1946"/>
         <CursorPos X="1" Y="1961"/>
         <UsageCount Value="10"/>
-      </Unit11>
-      <Unit12>
+      </Unit12>
+      <Unit13>
         <Filename Value="C:\lazarus\lcl\include\application.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="286"/>
         <CursorPos X="1" Y="301"/>
         <UsageCount Value="7"/>
-      </Unit12>
-      <Unit13>
+      </Unit13>
+      <Unit14>
         <Filename Value="C:\lazarus\lcl\widgetset\wscomctrls.pp"/>
         <UnitName Value="WSComCtrls"/>
         <WindowIndex Value="0"/>
         <TopLine Value="359"/>
         <CursorPos X="1" Y="375"/>
         <UsageCount Value="7"/>
-      </Unit13>
-      <Unit14>
+      </Unit14>
+      <Unit15>
         <Filename Value="C:\lazarus\fpc\2.6.2\source\packages\fcl-db\src\base\db.pas"/>
         <UnitName Value="db"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1099"/>
         <CursorPos X="3" Y="1115"/>
         <UsageCount Value="8"/>
-      </Unit14>
-      <Unit15>
+      </Unit15>
+      <Unit16>
         <Filename Value="C:\Langs\lazarus\fpc\2.6.2\source\packages\fcl-db\src\base\db.pas"/>
         <UnitName Value="db"/>
         <WindowIndex Value="0"/>
         <TopLine Value="21"/>
         <CursorPos X="29" Y="49"/>
         <UsageCount Value="8"/>
-      </Unit15>
-      <Unit16>
+      </Unit16>
+      <Unit17>
         <Filename Value="C:\Langs\lazarus\fpc\2.6.2\source\packages\fcl-db\src\base\dataset.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1681"/>
         <CursorPos X="16" Y="1684"/>
         <UsageCount Value="9"/>
-      </Unit16>
-      <Unit17>
+      </Unit17>
+      <Unit18>
         <Filename Value="C:\lazarus\lcl\include\fpimagebitmap.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="129"/>
         <CursorPos X="49" Y="142"/>
         <UsageCount Value="9"/>
-      </Unit17>
-      <Unit18>
-        <Filename Value="conflicts.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="ConflictForm"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="Conflicts"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="6"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="38"/>
-        <CursorPos X="46" Y="54"/>
-        <UsageCount Value="24"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit18>
     </Units>
     <General>

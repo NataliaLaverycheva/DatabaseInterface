@@ -116,6 +116,7 @@
         <Filename Value="conflicts.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ConflictForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Conflicts"/>
       </Unit10>

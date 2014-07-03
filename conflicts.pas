@@ -40,7 +40,7 @@ var
   i, j: integer;
   MainTreeNode, ConfTreeNode, ChildConfTreeNode: TTreeNode;
 begin
-  SetLength(ConflictsName, 6{Length(ConflictQuery)});
+  SetLength(ConflictsName, Length(ConflictQuery));
   ConflictsName[0] := 'Разные пары в одной аудитории';
   ConflictsName[1] := 'Преподаватель в разных аудиториях';
   ConflictsName[2] := 'Преподаватель на разных парах';
@@ -49,7 +49,7 @@ begin
   ConflictsName[5] := 'Дублирующиеся пары';
 
   MainTreeNode := TreeView.Items.Add(nil, 'Конфликты');
-  for i := 0 to 5{High(ConflictQuery)} do begin
+  for i := 0 to High(ConflictQuery) do begin
     ConfTreeNode := TreeView.Items.AddChild(MainTreeNode,
       Format('%d. %s', [i + 1, ConflictsName[i]]));
       //for j := 0 to 2{High(Pairs)} do begin
@@ -62,6 +62,13 @@ end;
 
 { TConflictForm }
 initialization
+
+  AddConflictQuery('SELECT S1.*, S2.* FROM SCHEDULE_ITEMS S1 INNER JOIN SCHEDULE_ITEMS S2 ON S1.TIME_INDEX=S2.TIME_INDEX AND S1.DAY_INDEX=S2.DAY_INDEX AND s1.ROOM_ID=S2.ROOM_ID AND  S1.PROFESSOR_ID<>S2.PROFESSOR_ID AND S1.ID<S2.ID');
+  AddConflictQuery('SELECT s1.*, s2.* FROM SCHEDULE_ITEMS S1 INNER JOIN SCHEDULE_ITEMS S2 ON S1.PROFESSOR_ID=S2.PROFESSOR_ID AND S1.TIME_INDEX=S2.TIME_INDEX AND S1.DAY_INDEX=S2.DAY_INDEX AND S1.ROOM_ID<>S2.ROOM_ID AND S1.ID<S2.ID');
+  AddConflictQuery('SELECT S1.*, S2.* FROM SCHEDULE_ITEMS S1 INNER JOIN SCHEDULE_ITEMS S2 ON S1.PROFESSOR_ID=S2.PROFESSOR_ID AND S1.TIME_INDEX=S2.TIME_INDEX AND S1.DAY_INDEX=S2.DAY_INDEX AND S1.SUBJECT_ID<>S2.SUBJECT_ID AND S1.ID<S2.ID');
+  AddConflictQuery('SELECT S1.*, S2.* FROM SCHEDULE_ITEMS S1 INNER JOIN SCHEDULE_ITEMS S2 ON S1.TIME_INDEX=S2.TIME_INDEX AND S1.DAY_INDEX=S2.DAY_INDEX AND S1.GROUP_ID=S2.GROUP_ID AND S1.ROOM_ID<>S2.ROOM_ID AND S1.ID<S2.ID');
+  AddConflictQuery('SELECT S1.*, S2.* FROM SCHEDULE_ITEMS S1 INNER JOIN SCHEDULE_ITEMS S2 ON S1.TIME_INDEX=S2.TIME_INDEX AND S1.DAY_INDEX=S2.DAY_INDEX AND S1.GROUP_ID=S2.GROUP_ID AND S1.SUBJECT_ID<>S2.SUBJECT_ID AND S1.ID<S2.ID');
+  AddConflictQuery('SELECT S1.*, S2.* FROM SCHEDULE_ITEMS S1 INNER JOIN SCHEDULE_ITEMS S2 ON S1.TIME_INDEX=S2.TIME_INDEX AND S1.DAY_INDEX=S2.DAY_INDEX AND S1.GROUP_ID=S2.GROUP_ID AND S1.SUBJECT_ID=S2.SUBJECT_ID AND s1.SUBJECT_TYPE_ID=s2.SUBJECT_TYPE_ID AND s1.PROFESSOR_ID=s2.PROFESSOR_ID AND S1.ROOM_ID=S2.ROOM_ID AND S1.ID<S2.ID');
 
 end.
 

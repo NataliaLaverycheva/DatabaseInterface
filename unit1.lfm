@@ -1,7 +1,7 @@
 object Schedule: TSchedule
-  Left = 686
+  Left = 788
   Height = 337
-  Top = 23
+  Top = 43
   Width = 367
   BorderIcons = [biSystemMenu]
   Caption = 'Schedule'
