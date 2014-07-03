@@ -48,7 +48,7 @@ type
     procedure DrawGridMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
     procedure ShowFNameChange(Sender: TObject);
-    procedure ShowSchedClick;
+    procedure ShowSchedClick(Sender: TObject);
     procedure TakeFieldNameItemClick(Sender: TObject; Index: integer);
   private
     Rec: array of array of array of array of string;
@@ -60,7 +60,7 @@ type
     FilterList: TFilterList;
     EditPanel: TEditPanel;
     ColEdit, RowEdit: integer;
-    EditForm: TEditForm;
+    EditForm: array of TEditForm;
     procedure DrawTitle(ACol, ARow: integer; ARect: TRect);
     procedure DrawCell(ACol, ARow: integer; ARect: TRect);
     procedure GetCheckGroupShowFieldsName;
@@ -71,8 +71,7 @@ type
     function CountTakeField: integer;
     function GetStrToShow(i, j, k, l: integer): string;
     procedure DeleteDataFromCell(Sender: TObject);
-    procedure InsertDataAtCell(Sender: TObject);
-    procedure UpdateDataAtCell(Sender: TObject);
+    procedure InsertUpdateDataAtCell(Sender: TObject);
     procedure ShowCell(ACol, ARow: integer);
   const orderby: array[0..6] of string = ('NAME', 'NAME', 'NAME',
     'NAME', 'ID', 'NAME', 'NAME');
@@ -94,20 +93,24 @@ implementation
 
 procedure TEditPanel.GetEditPanel(ADrawGrid: TDrawGrid; ACol, ARow: integer);
 var
-  i, Id: integer;
+  i, Id, Indent, NowInd: integer;
   Rect: TRect;
 begin
+  Indent := 0;
   Rect := ADrawGrid.CellRect(ACol, ARow);
   for i := 0 to High(Panel) do begin
     Id := StrToInt(T.Rec[ACol - 1, ARow - 1, i, 0]);
+    NowInd := Rect.Top + (i+1)*T.CountTakeField*17 + Indent;
+    if NowInd > Rect.Bottom then Exit;
     with Panel[i] do begin
       Parent := ADrawGrid;
       Height := 25;
       Width := 67;
-      Top := Rect.Top + (i + 1)*110;
+      Top := NowInd;
       Left := Rect.Left + 120;
       BevelOuter := bvNone;
     end;
+    inc(Indent, 20);
     BtnDelete := TSpeedButton.Create(Panel[i]);
     with BtnDelete do begin
       Parent := Panel[i];
@@ -121,11 +124,12 @@ begin
     BtnInsert := TSpeedButton.Create(Panel[i]);
     with BtnInsert do begin
       Parent := Panel[i];
+      Tag := 0;
       Left := 25;
       Glyph.LoadFromFile(GetCurrentDir + '\ico\edit_add_5036.bmp');
       Height := 20;
       Width := 20;
-      OnClick := @T.InsertDataAtCell;
+      OnClick := @T.InsertUpdateDataAtCell;
     end;
     BtnUpdate := TSpeedButton.Create(Panel[i]);
     with BtnUpdate do begin
@@ -135,7 +139,7 @@ begin
       Glyph.LoadFromFile(GetCurrentDir + '\ico\noatunloopsong_6487.bmp');
       Height := 20;
       Width := 20;
-      OnClick := @T.UpdateDataAtCell;
+      OnClick := @T.InsertUpdateDataAtCell;
     end;
   end;
 end;
@@ -144,7 +148,7 @@ end;
 
 { TT }
 
-procedure TT.ShowSchedClick;
+procedure TT.ShowSchedClick(Sender: TObject);
 begin
   GetCheckGroupShowFieldsName;
   GetXData;
@@ -220,7 +224,7 @@ end;
 
 procedure TT.BtnExecuteFilterClick(Sender: TObject);
 begin
-  ShowSchedClick;
+  ShowSchedClick(ShowSched);
 end;
 
 procedure TT.ShowFNameChange(Sender: TObject);
@@ -332,25 +336,29 @@ procedure TT.DeleteDataFromCell(Sender: TObject);
 var
   i: integer;
 begin
-  if MessageDlg('Вы действительно хотите удалить все записи в этой ячейке?',
+  if MessageDlg('Вы действительно хотите удалить запись?',
     mtConfirmation, mbYesNo, 0) <> mrYes then exit;
-  for i := 0 to High(Rec[ColEdit - 1, RowEdit - 1]) do
-    DeleteRec(SQLQuery, StrToInt(Rec[ColEdit - 1, RowEdit - 1, i, 0]), Table);
+  DeleteRec(SQLQuery, (Sender as TSpeedButton).Tag, Table);
   SQLQuery.ApplyUpdates;
   Connect.ConnectForm.SQLTransaction.Commit;
-  ShowSchedClick;
+  ShowSchedClick(ShowSched);
 end;
 
-procedure TT.InsertDataAtCell(Sender: TObject);
+procedure TT.InsertUpdateDataAtCell(Sender: TObject);
+var
+  i, Id: integer;
 begin
-  EditForm := TEditForm.Create(nil);
-  EditForm.GetEditForm(Table, 0, nil);
-  EditForm.Show;
-end;
-
-procedure TT.UpdateDataAtCell(Sender: TObject);
-begin
-
+  Id := (Sender as TSpeedButton).Tag;
+  for i := 0 to High(EditForm) do
+    if EditForm[i].Id = Id then begin
+      EditForm[i].Show;
+      Exit;
+    end;
+  SetLength(EditForm, Length(EditForm) + 1);
+  EditForm[High(EditForm)] := TEditForm.Create(nil);
+  EditForm[High(EditForm)].GetEditForm(
+    Table, Id, @ShowSchedClick);
+  EditForm[High(EditForm)].Show;
 end;
 
 procedure TT.ShowCell(ACol, ARow: integer);
@@ -389,7 +397,7 @@ begin
   GetLogicalConnective;
   FilterList := TFilterList.Create(Table);
   EditPanel := TEditPanel.Create;
-  ShowSchedClick;
+  ShowSchedClick(ShowSched);
   Show;
 end;
 
@@ -418,6 +426,7 @@ var
   CondX, CondY: boolean;
 begin
   k := 0;
+  ConnectForm.SQLTransaction.Commit;
   with SQLQuery do begin
     Close;
     SQL.Text := Format('%s ORDER BY %s.%s, %s.%s', [

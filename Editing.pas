@@ -30,16 +30,15 @@ type
   private
     TableInfo: TTableInfo;
     rec: array of TEditField;
-    FId: integer;
     FOnChange: TNotifyEvent;
     function InsertQuery: String;
     function UpdateQuery: String;
     procedure DeleteQuotes(var s: string);
     procedure SetParams(AQuery: TSQLQuery);
   public
+    Id: integer;
     procedure GetEditForm(
       ATable: TTableInfo; AId: integer; AOnChange: TNotifyEvent);
-    property Id: Integer read FId;
   end;
 
 implementation
@@ -59,7 +58,7 @@ var
   LookupDataSource: TDataSource;
   s, AFieldName, fn: string;
 begin
-  FId := AId;
+  Id := AId;
   TableInfo := ATable;
   FOnChange:= AOnChange;
   Caption := TableInfo.TableCaption;
@@ -67,7 +66,7 @@ begin
   SQLQuery.Transaction := ConnectForm.SQLTransaction;
   SQLQuery.SQL.Text := TableInfo.MakeQuery(true) +
     ' WHERE ' + TableInfo.TableName + '.id = :id';
-  SQLQuery.ParamByName('id').AsInteger := FId;
+  SQLQuery.ParamByName('id').AsInteger := Id;
   SQLQuery.Open;
   SQLQuery.Edit;
 
@@ -148,7 +147,7 @@ begin
     data += Format(', %s = :par%d', [TableInfo.Fields[i].FieldName, i]);
   Delete(data, 1, 1);
   Result := Format('update %s SET %s where id = %d',
-    [TableInfo.TableName, data, FId]);
+    [TableInfo.TableName, data, Id]);
 end;
 
 procedure TEditForm.DeleteQuotes(var s: string);

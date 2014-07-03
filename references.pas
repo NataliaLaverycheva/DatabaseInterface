@@ -163,7 +163,7 @@ begin
     rId := 0
   else begin
     rId := SQLQuery.FieldByName('id').AsInteger;
-    for i:= 0 to High(EditForms) do
+    for i := 0 to High(EditForms) do
       if EditForms[i].Id = rId then begin
         EditForms[i].Show;
         Exit;
