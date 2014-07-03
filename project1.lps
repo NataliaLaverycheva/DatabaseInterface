@@ -4,14 +4,14 @@
     <PathDelim Value="\"/>
     <Version Value="9"/>
     <BuildModes Active="Default"/>
-    <Units Count="18">
+    <Units Count="19">
       <Unit0>
         <Filename Value="project1.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="project1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="20" Y="6"/>
+        <CursorPos X="55" Y="22"/>
         <UsageCount Value="200"/>
       </Unit0>
       <Unit1>
@@ -50,8 +50,8 @@
         <UnitName Value="MetaData"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="122"/>
-        <CursorPos X="28" Y="166"/>
+        <TopLine Value="146"/>
+        <CursorPos X="15" Y="18"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit3>
@@ -66,6 +66,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="11" Y="166"/>
+        <ComponentState Value="1"/>
         <UsageCount Value="200"/>
         <Bookmarks Count="2">
           <Item0 X="3" Y="128" ID="1"/>
@@ -105,11 +106,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="TimeTable"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="341"/>
-        <CursorPos X="44" Y="363"/>
+        <TopLine Value="220"/>
+        <CursorPos X="23" Y="235"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -123,9 +123,9 @@
         <UnitName Value="Editing"/>
         <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="101"/>
-        <CursorPos X="30" Y="39"/>
-        <UsageCount Value="141"/>
+        <TopLine Value="7"/>
+        <CursorPos X="10" Y="12"/>
+        <UsageCount Value="147"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit8>
@@ -135,7 +135,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="5" Y="2"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="68"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit9>
       <Unit10>
@@ -148,9 +148,9 @@
       <Unit11>
         <Filename Value="C:\lazarus\lcl\include\customform.inc"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="2053"/>
-        <CursorPos X="1" Y="2070"/>
-        <UsageCount Value="2"/>
+        <TopLine Value="1946"/>
+        <CursorPos X="1" Y="1961"/>
+        <UsageCount Value="10"/>
       </Unit11>
       <Unit12>
         <Filename Value="C:\lazarus\lcl\include\application.inc"/>
@@ -197,127 +197,146 @@
         <CursorPos X="49" Y="142"/>
         <UsageCount Value="9"/>
       </Unit17>
+      <Unit18>
+        <Filename Value="conflicts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ConflictForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Conflicts"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="38"/>
+        <CursorPos X="46" Y="54"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit18>
     </Units>
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="29" HistoryIndex="28">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="timetable.pas"/>
-        <Caret Line="202" Column="34" TopLine="189"/>
+        <Caret Line="60" Column="20" TopLine="47"/>
       </Position1>
       <Position2>
         <Filename Value="timetable.pas"/>
-        <Caret Line="201" Column="40" TopLine="189"/>
+        <Caret Line="244" Column="76" TopLine="227"/>
       </Position2>
       <Position3>
         <Filename Value="timetable.pas"/>
-        <Caret Line="338" Column="10" TopLine="318"/>
+        <Caret Line="431" Column="17" TopLine="417"/>
       </Position3>
       <Position4>
         <Filename Value="timetable.pas"/>
-        <Caret Line="106" Column="18" TopLine="85"/>
+        <Caret Line="430" Column="19" TopLine="415"/>
       </Position4>
       <Position5>
         <Filename Value="timetable.pas"/>
-        <Caret Line="107" Column="1" TopLine="99"/>
+        <Caret Line="154" Column="8" TopLine="150"/>
       </Position5>
       <Position6>
         <Filename Value="timetable.pas"/>
-        <Caret Line="102" Column="38" TopLine="93"/>
+        <Caret Line="132" Column="48" TopLine="108"/>
       </Position6>
       <Position7>
         <Filename Value="timetable.pas"/>
-        <Caret Line="350" Column="15" TopLine="325"/>
+        <Caret Line="74" Column="54" TopLine="65"/>
       </Position7>
       <Position8>
-        <Filename Value="references.pas"/>
-        <Caret Line="204" Column="36" TopLine="200"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="142" Column="48" TopLine="118"/>
       </Position8>
       <Position9>
-        <Filename Value="references.pas"/>
-        <Caret Line="168" Column="28" TopLine="146"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="94" Column="55" TopLine="92"/>
       </Position9>
       <Position10>
         <Filename Value="timetable.pas"/>
-        <Caret Line="74" Column="19" TopLine="52"/>
+        <Caret Line="122" Column="27" TopLine="93"/>
       </Position10>
       <Position11>
-        <Filename Value="references.pas"/>
-        <Caret Line="162" Column="32" TopLine="76"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="347" Column="52" TopLine="341"/>
       </Position11>
       <Position12>
-        <Filename Value="references.pas"/>
-        <Caret Line="174" Column="38" TopLine="148"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="94" Column="27" TopLine="79"/>
       </Position12>
       <Position13>
         <Filename Value="timetable.pas"/>
-        <Caret Line="352" Column="19" TopLine="337"/>
+        <Caret Line="74" Column="53" TopLine="65"/>
       </Position13>
       <Position14>
         <Filename Value="timetable.pas"/>
-        <Caret Line="350" Column="14" TopLine="335"/>
+        <Caret Line="365" Column="64" TopLine="340"/>
       </Position14>
       <Position15>
         <Filename Value="Editing.pas"/>
-        <Caret Line="42" Column="1" TopLine="18"/>
+        <Caret Line="27" Column="18" TopLine="15"/>
       </Position15>
       <Position16>
         <Filename Value="Editing.pas"/>
-        <Caret Line="61" Column="3" TopLine="46"/>
+        <Caret Line="33" Column="26" TopLine="12"/>
       </Position16>
       <Position17>
-        <Filename Value="Editing.pas"/>
-        <Caret Line="69" Column="43" TopLine="55"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="356" Column="23" TopLine="342"/>
       </Position17>
       <Position18>
-        <Filename Value="Editing.pas"/>
-        <Caret Line="57" Column="29" TopLine="52"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="366" Column="21" TopLine="342"/>
       </Position18>
       <Position19>
         <Filename Value="timetable.pas"/>
-        <Caret Line="350" Column="76" TopLine="336"/>
+        <Caret Line="359" Column="18" TopLine="342"/>
       </Position19>
       <Position20>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="151" Column="28" TopLine="143"/>
+        <Filename Value="conflicts.pas"/>
+        <Caret Line="14" Column="45" TopLine="1"/>
       </Position20>
       <Position21>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="51" Column="15" TopLine="51"/>
+        <Filename Value="conflicts.pas"/>
+        <Caret Line="16" Column="39" TopLine="1"/>
       </Position21>
       <Position22>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="51" Column="46" TopLine="46"/>
+        <Filename Value="conflicts.pas"/>
+        <Caret Line="19" Column="19" TopLine="1"/>
       </Position22>
       <Position23>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="346" Column="24" TopLine="327"/>
+        <Filename Value="conflicts.pas"/>
+        <Caret Line="29" Column="1" TopLine="2"/>
       </Position23>
       <Position24>
         <Filename Value="timetable.pas"/>
-        <Caret Line="227" Column="17" TopLine="212"/>
+        <Caret Line="454" Column="32" TopLine="437"/>
       </Position24>
       <Position25>
         <Filename Value="timetable.pas"/>
-        <Caret Line="344" Column="28" TopLine="329"/>
+        <Caret Line="461" Column="32" TopLine="444"/>
       </Position25>
       <Position26>
         <Filename Value="timetable.pas"/>
-        <Caret Line="352" Column="28" TopLine="337"/>
+        <Caret Line="235" Column="18" TopLine="220"/>
       </Position26>
       <Position27>
-        <Filename Value="references.pas"/>
-        <Caret Line="174" Column="57" TopLine="156"/>
+        <Filename Value="conflicts.pas"/>
+        <Caret Line="19" Column="14" TopLine="4"/>
       </Position27>
       <Position28>
-        <Filename Value="Editing.pas"/>
-        <Caret Line="172" Column="49" TopLine="171"/>
+        <Filename Value="conflicts.pas"/>
+        <Caret Line="59" Column="62" TopLine="40"/>
       </Position28>
       <Position29>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="266" Column="50" TopLine="250"/>
+        <Filename Value="conflicts.pas"/>
+        <Caret Line="58" Column="41" TopLine="43"/>
       </Position29>
+      <Position30>
+        <Filename Value="conflicts.pas"/>
+        <Caret Line="59" Column="37" TopLine="46"/>
+      </Position30>
     </JumpHistory>
   </ProjectSession>
   <Debugging>

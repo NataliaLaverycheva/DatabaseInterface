@@ -7,7 +7,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, Unit1, Connect, MetaData, References, Editing, TimeTable;
+  Forms, Unit1, Connect, MetaData, References, Editing, TimeTable, Conflicts;
 
 {$R *.res}
 
@@ -19,6 +19,7 @@ begin
   Application.CreateForm(TReferences, FReferences);
   //Application.CreateForm(TEditForm, EditForm);
   Application.CreateForm(TT, T);
+  //Application.CreateForm(TConflictForm, ConflictForm);
   Application.Run;
 end.
 

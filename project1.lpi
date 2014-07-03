@@ -41,7 +41,7 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="10">
+    <Units Count="11">
       <Unit0>
         <Filename Value="project1.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -112,6 +112,13 @@
         <Filename Value="Editing.lfm"/>
         <IsPartOfProject Value="True"/>
       </Unit9>
+      <Unit10>
+        <Filename Value="conflicts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ConflictForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Conflicts"/>
+      </Unit10>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

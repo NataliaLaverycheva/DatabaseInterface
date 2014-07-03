@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   DBGrids, StdCtrls, Buttons, Grids, sqldb, db, MetaData, References, Connect,
-  Editing;
+  Editing, Conflicts;
 
 type
 
@@ -31,6 +31,7 @@ type
     DrawGrid: TDrawGrid;
     BtnAddFilter: TSpeedButton;
     BtnExecuteFilter: TSpeedButton;
+    BtnShowConflicts: TSpeedButton;
     yLabel: TLabel;
     XLabel: TLabel;
     ShowSched: TSpeedButton;
@@ -41,6 +42,7 @@ type
     TakeFieldName: TCheckGroup;
     procedure BtnAddFilterClick(Sender: TObject);
     procedure BtnExecuteFilterClick(Sender: TObject);
+    procedure BtnShowConflictsClick(Sender: TObject);
     procedure DrawGridDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
     procedure DrawGridMouseDown(Sender: TObject; Button: TMouseButton;
@@ -52,8 +54,7 @@ type
     procedure TakeFieldNameItemClick(Sender: TObject; Index: integer);
   private
     Rec: array of array of array of array of string;
-    x: array of string;
-    y: array of string;
+    x, y: array of string;
     xField, yField: TFieldInfo;
     xTable, yTable: TTableInfo;
     xIndex, yIndex: integer;
@@ -61,6 +62,7 @@ type
     EditPanel: TEditPanel;
     ColEdit, RowEdit: integer;
     EditForm: array of TEditForm;
+    ConflictForm: TConflictForm;
     procedure DrawTitle(ACol, ARow: integer; ARect: TRect);
     procedure DrawCell(ACol, ARow: integer; ARect: TRect);
     procedure GetCheckGroupShowFieldsName;
@@ -227,6 +229,13 @@ begin
   ShowSchedClick(ShowSched);
 end;
 
+procedure TT.BtnShowConflictsClick(Sender: TObject);
+begin
+  ConflictForm := TConflictForm.Create(nil);
+  ConflictForm.GetTree;
+  ConflictForm.Show;
+end;
+
 procedure TT.ShowFNameChange(Sender: TObject);
 begin
    DrawGrid.Invalidate;
@@ -350,7 +359,7 @@ var
 begin
   Id := (Sender as TSpeedButton).Tag;
   for i := 0 to High(EditForm) do
-    if EditForm[i].Id = Id then begin
+    if (EditForm[i].Id = Id) then begin
       EditForm[i].Show;
       Exit;
     end;
