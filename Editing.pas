@@ -29,7 +29,6 @@ type
     procedure DatasourceDataChange(Sender: TObject; Field: TField);
   private
     TableInfo: TTableInfo;
-    rec: array of TEditField;
     FOnChange: TNotifyEvent;
     function InsertQuery: String;
     function UpdateQuery: String;
@@ -37,6 +36,7 @@ type
     procedure SetParams(AQuery: TSQLQuery);
   public
     Id: integer;
+    rec: array of TEditField;
     procedure GetEditForm(
       ATable: TTableInfo; AId: integer; AOnChange: TNotifyEvent);
   end;

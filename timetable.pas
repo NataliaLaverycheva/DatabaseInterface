@@ -358,6 +358,10 @@ begin
   EditForm[High(EditForm)] := TEditForm.Create(nil);
   EditForm[High(EditForm)].GetEditForm(
     Table, Id, @ShowSchedClick);
+  if Id <> 0 then begin
+    EditForm[High(EditForm)].rec[xIndex + 1].Box.Enabled := false;
+    EditForm[High(EditForm)].rec[yIndex + 1].Box.Enabled := false;
+  end;
   EditForm[High(EditForm)].Show;
 end;
 

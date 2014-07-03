@@ -64,9 +64,8 @@
         <UnitName Value="References"/>
         <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="153"/>
+        <TopLine Value="1"/>
         <CursorPos X="11" Y="166"/>
-        <ComponentState Value="1"/>
         <UsageCount Value="200"/>
         <Bookmarks Count="2">
           <Item0 X="3" Y="128" ID="1"/>
@@ -106,10 +105,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="TimeTable"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="339"/>
-        <CursorPos X="56" Y="359"/>
+        <TopLine Value="341"/>
+        <CursorPos X="44" Y="363"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -121,11 +121,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Editing"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="99"/>
-        <CursorPos X="47" Y="116"/>
+        <TopLine Value="101"/>
+        <CursorPos X="30" Y="39"/>
         <UsageCount Value="141"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -202,7 +201,7 @@
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
         <Filename Value="timetable.pas"/>
         <Caret Line="202" Column="34" TopLine="189"/>
@@ -289,40 +288,36 @@
       </Position21>
       <Position22>
         <Filename Value="timetable.pas"/>
-        <Caret Line="76" Column="45" TopLine="311"/>
+        <Caret Line="51" Column="46" TopLine="46"/>
       </Position22>
       <Position23>
         <Filename Value="timetable.pas"/>
-        <Caret Line="51" Column="46" TopLine="46"/>
+        <Caret Line="346" Column="24" TopLine="327"/>
       </Position23>
       <Position24>
         <Filename Value="timetable.pas"/>
-        <Caret Line="346" Column="24" TopLine="327"/>
+        <Caret Line="227" Column="17" TopLine="212"/>
       </Position24>
       <Position25>
         <Filename Value="timetable.pas"/>
-        <Caret Line="227" Column="17" TopLine="212"/>
+        <Caret Line="344" Column="28" TopLine="329"/>
       </Position25>
       <Position26>
         <Filename Value="timetable.pas"/>
-        <Caret Line="344" Column="28" TopLine="329"/>
+        <Caret Line="352" Column="28" TopLine="337"/>
       </Position26>
       <Position27>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="352" Column="28" TopLine="337"/>
-      </Position27>
-      <Position28>
         <Filename Value="references.pas"/>
         <Caret Line="174" Column="57" TopLine="156"/>
-      </Position28>
-      <Position29>
+      </Position27>
+      <Position28>
         <Filename Value="Editing.pas"/>
         <Caret Line="172" Column="49" TopLine="171"/>
-      </Position29>
-      <Position30>
+      </Position28>
+      <Position29>
         <Filename Value="timetable.pas"/>
         <Caret Line="266" Column="50" TopLine="250"/>
-      </Position30>
+      </Position29>
     </JumpHistory>
   </ProjectSession>
   <Debugging>
