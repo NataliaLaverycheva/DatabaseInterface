@@ -6,6 +6,7 @@ object ConflictForm: TConflictForm
   Caption = 'Дерево конфликтов'
   ClientHeight = 377
   ClientWidth = 397
+  OnCreate = FormCreate
   LCLVersion = '1.0.12.0'
   object TreeView: TTreeView
     Left = 0
