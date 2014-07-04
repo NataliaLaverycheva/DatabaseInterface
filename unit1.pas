@@ -64,7 +64,9 @@ end;
 procedure TSchedule.TableShow(Sender: TObject);
 var
   FTag: integer;
+  ArrId: TArrId;
 begin
+  ArrId[0] := 0;
   SetLength(FReferences, Length(FReferences) + 1);
   FTag := (Sender as TMenuItem).Tag;
   FReferences[FTag] := TReferences.Create(nil);
@@ -72,7 +74,7 @@ begin
     Table := Meta[FTag];
     Id := FTag;
     Tag := FTag;
-    ShowTable(Meta[FTag]);
+    ShowTable(Meta[FTag], ArrId);
   end;
 end;
 

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  Connect, sqldb, DB;
+  Connect, sqldb, References, MetaData;
 
 type
 
@@ -20,13 +20,16 @@ type
     SQLQuery: TSQLQuery;
     TreeView: TTreeView;
     procedure FormCreate(Sender: TObject);
+    procedure TreeViewDblClick(Sender: TObject);
   private
+    Table: TTableInfo;
     ConflictId: array of array of TConflictId;
     procedure GetDataConflict;
     { private declarations }
   public
+    Reference: array of TReferences;
     ConflictsName: array of string;
-    procedure GetTree;
+    procedure GetTree(ATable: TTableInfo);
     { public declarations }
   end;
 
@@ -59,6 +62,23 @@ begin
   ConflictsName[5] := 'Дублирующиеся пары';
 end;
 
+procedure TConflictForm.TreeViewDblClick(Sender: TObject);
+var
+  AId1, AId2: integer;
+  ArrId: TArrId;
+begin
+  if TreeView.Selected.Data = nil then Exit;
+  ArrId[0] := TConflictId(TreeView.Selected.Data^).Id1;
+  ArrId[1] := TConflictId(TreeView.Selected.Data^).Id2;
+
+  SetLength(Reference, Length(Reference) + 1);
+  Reference[High(Reference)] := TReferences.Create(nil);
+  with Reference[High(Reference)] do begin
+    Table := Meta[9];
+    ShowTable(Meta[9], ArrId);
+  end;
+end;
+
 procedure TConflictForm.GetDataConflict;
 var
   i: integer;
@@ -82,11 +102,12 @@ begin
   end;
 end;
 
-procedure TConflictForm.GetTree;
+procedure TConflictForm.GetTree(ATable: TTableInfo);
 var
   i, j: integer;
   MainTreeNode, ConfTreeNode, ChildConfTreeNode: TTreeNode;
 begin
+  Table := ATable;
   GetDataConflict;
   MainTreeNode := TreeView.Items.Add(nil, 'Конфликты');
   for i := 0 to High(ConflictQuery) do begin
@@ -96,6 +117,7 @@ begin
         ChildConfTreeNode := TreeView.Items.AddChild(
           ConfTreeNode, Format('Конфликт между %d и %d',
           [ConflictId[i, j].Id1, ConflictId[i, j].Id2]));
+        ChildConfTreeNode.Data := @ConflictId[i, j];
       end;
   end;
 end;

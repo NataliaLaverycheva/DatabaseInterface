@@ -1,7 +1,7 @@
 object T: TT
-  Left = 34
+  Left = 263
   Height = 682
-  Top = 267
+  Top = 597
   Width = 1172
   Caption = 'T'
   ClientHeight = 682

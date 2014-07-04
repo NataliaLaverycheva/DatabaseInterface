@@ -11,6 +11,8 @@ uses
 
 type
 
+  TArrId = array[0..1] of integer;
+
   { TFilter }
 
   TFilter = class
@@ -60,13 +62,14 @@ type
     procedure Refresh;
     function OrderBy: String;
     procedure UpdateData(Sender: TObject);
+    procedure UpdateColumns;
   public
     EditForms: array of TEditForm;
     Id: integer;
     FSortIndex: Integer;
     FSortDir: boolean;
     Table: TTableInfo;
-    procedure ShowTable(ATable: TTableInfo);
+    procedure ShowTable(ATable: TTableInfo; ArrId: TArrId);
   end;
 
 var
@@ -92,6 +95,16 @@ begin
   Refresh;
 end;
 
+procedure TReferences.UpdateColumns;
+var
+  i: integer;
+begin
+  for i := 0 to High(Table.Fields) do begin
+    DBGrid.Columns[i].Title.Caption := Table.Fields[i].FieldCaption;
+    DBGrid.Columns[i].Width := Table.Fields[i].Width * 10;
+  end;
+end;
+
 procedure TReferences.Refresh;
 var
   t: String;
@@ -108,9 +121,8 @@ begin
     t := Table.Fields[i].FieldCaption;
     if i = FSortIndex then
       t += ' ' + SORT_INDICATOR[FSortDir];
-    DBGrid.Columns[i].Title.Caption := t;
-    DBGrid.Columns[i].Width := Table.Fields[i].Width * 10;
   end;
+  UpdateColumns;
 end;
 
 function TReferences.OrderBy: String;
@@ -138,11 +150,22 @@ begin
   end;
 end;
 
-procedure TReferences.ShowTable(ATable: TTableInfo);
+procedure TReferences.ShowTable(ATable: TTableInfo; ArrId: TArrId);
+var
+  s: string;
 begin
   FilterList := TFilterList.Create(ATable);
   Caption := ATable.TableCaption;
   Refresh;
+  if ArrId[0] <> 0 then begin
+    s := SQLQuery.SQL.Text;
+    Delete(s, Length(s) - 13, 12);
+    SQLQuery.Close;
+    SQLQuery.SQL.Text := s + Format(
+      ' WHERE SCHEDULE_ITEMS.id=%d or SCHEDULE_ITEMS.id=%d', [ArrId[0], ArrId[1]]);
+    SQLQuery.Open;
+  end;
+  UpdateColumns;
   Show;
 end;
 

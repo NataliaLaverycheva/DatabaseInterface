@@ -232,7 +232,7 @@ end;
 procedure TT.BtnShowConflictsClick(Sender: TObject);
 begin
   ConflictForm := TConflictForm.Create(nil);
-  ConflictForm.GetTree;
+  ConflictForm.GetTree(Table);
   ConflictForm.Show;
 end;
 
