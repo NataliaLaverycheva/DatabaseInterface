@@ -23,26 +23,40 @@ type
     procedure TreeViewDblClick(Sender: TObject);
   private
     Table: TTableInfo;
+    Reference: array of TReferences;
+    ConflictsName: array of string;
     ConflictId: array of array of TConflictId;
     procedure GetDataConflict;
     { private declarations }
   public
-    Reference: array of TReferences;
-    ConflictsName: array of string;
+    SetConflicts: set of byte;
     procedure GetTree(ATable: TTableInfo);
     { public declarations }
   end;
 
 var
   ConflictQuery: array of string;
-  procedure AddConflictQuery(AQuery: string);
+  procedure AddConflictQuery(
+    EqArr: array of string; UnEqArr: array of string);
 
 implementation
 
 {$R *.lfm}
 
-procedure AddConflictQuery(AQuery: string);
+procedure AddConflictQuery(
+  EqArr: array of string; UnEqArr: array of string);
+var
+  i: integer;
+  AQuery, EqQuery: string;
 begin
+  AQuery := 'SELECT S1.*, S2.* FROM SCHEDULE_ITEMS S1 INNER JOIN SCHEDULE_ITEMS S2 ON S1.ID<S2.ID AND ';
+  EqQuery := '';
+  for i := 0 to High(EqArr) do
+    EqQuery += Format('S1.%s=S2.%s AND ', [EqArr[i], EqArr[i]]);
+  for i := 0 to High(UnEqArr) do
+    EqQuery += Format('S1.%s<>S2.%s AND ', [UnEqArr[i], UnEqArr[i]]);
+  Delete(EqQuery, Length(EqQuery) - 3, 4);
+  AQuery += EqQuery;
   SetLength(ConflictQuery, Length(ConflictQuery) + 1);
   ConflictQuery[High(ConflictQuery)] := AQuery;
 end;
@@ -84,6 +98,7 @@ var
   i: integer;
   ConfId: TConflictId;
 begin
+  SetConflicts := [];
   SetLength(ConflictId, Length(ConflictQuery));
   for i := 0 to High(ConflictId) do begin
     with SQLQuery do begin
@@ -95,6 +110,7 @@ begin
          SetLength(ConflictId[i], Length(ConflictId[i]) + 1);
          ConfId.Id1 := SQLQuery.Fields[0].AsInteger;
          ConfId.Id2 := SQLQuery.Fields[9].AsInteger;
+         SetConflicts += [ConfId.Id1, ConfId.Id2];
          ConflictId[i, High(ConflictId[i])] := ConfId;
          Next;
        end;
@@ -125,12 +141,13 @@ end;
 { TConflictForm }
 initialization
 
-  AddConflictQuery('SELECT S1.*, S2.* FROM SCHEDULE_ITEMS S1 INNER JOIN SCHEDULE_ITEMS S2 ON S1.TIME_INDEX=S2.TIME_INDEX AND S1.DAY_INDEX=S2.DAY_INDEX AND s1.ROOM_ID=S2.ROOM_ID AND  S1.PROFESSOR_ID<>S2.PROFESSOR_ID AND S1.ID<S2.ID');
-  AddConflictQuery('SELECT s1.*, s2.* FROM SCHEDULE_ITEMS S1 INNER JOIN SCHEDULE_ITEMS S2 ON S1.PROFESSOR_ID=S2.PROFESSOR_ID AND S1.TIME_INDEX=S2.TIME_INDEX AND S1.DAY_INDEX=S2.DAY_INDEX AND S1.ROOM_ID<>S2.ROOM_ID AND S1.ID<S2.ID');
-  AddConflictQuery('SELECT S1.*, S2.* FROM SCHEDULE_ITEMS S1 INNER JOIN SCHEDULE_ITEMS S2 ON S1.PROFESSOR_ID=S2.PROFESSOR_ID AND S1.TIME_INDEX=S2.TIME_INDEX AND S1.DAY_INDEX=S2.DAY_INDEX AND S1.SUBJECT_ID<>S2.SUBJECT_ID AND S1.ID<S2.ID');
-  AddConflictQuery('SELECT S1.*, S2.* FROM SCHEDULE_ITEMS S1 INNER JOIN SCHEDULE_ITEMS S2 ON S1.TIME_INDEX=S2.TIME_INDEX AND S1.DAY_INDEX=S2.DAY_INDEX AND S1.GROUP_ID=S2.GROUP_ID AND S1.ROOM_ID<>S2.ROOM_ID AND S1.ID<S2.ID');
-  AddConflictQuery('SELECT S1.*, S2.* FROM SCHEDULE_ITEMS S1 INNER JOIN SCHEDULE_ITEMS S2 ON S1.TIME_INDEX=S2.TIME_INDEX AND S1.DAY_INDEX=S2.DAY_INDEX AND S1.GROUP_ID=S2.GROUP_ID AND S1.SUBJECT_ID<>S2.SUBJECT_ID AND S1.ID<S2.ID');
-  AddConflictQuery('SELECT S1.*, S2.* FROM SCHEDULE_ITEMS S1 INNER JOIN SCHEDULE_ITEMS S2 ON S1.TIME_INDEX=S2.TIME_INDEX AND S1.DAY_INDEX=S2.DAY_INDEX AND S1.GROUP_ID=S2.GROUP_ID AND S1.SUBJECT_ID=S2.SUBJECT_ID AND s1.SUBJECT_TYPE_ID=s2.SUBJECT_TYPE_ID AND s1.PROFESSOR_ID=s2.PROFESSOR_ID AND S1.ROOM_ID=S2.ROOM_ID AND S1.ID<S2.ID');
+  AddConflictQuery(['TIME_INDEX', 'DAY_INDEX', 'ROOM_ID'], ['PROFESSOR_ID']);
+  AddConflictQuery(['PROFESSOR_ID', 'TIME_INDEX', 'DAY_INDEX'], ['ROOM_ID']);
+  AddConflictQuery(['PROFESSOR_ID', 'TIME_INDEX', 'DAY_INDEX'], ['SUBJECT_ID']);
+  AddConflictQuery(['TIME_INDEX', 'DAY_INDEX', 'GROUP_ID'], ['ROOM_ID']);
+  AddConflictQuery(['TIME_INDEX', 'DAY_INDEX', 'GROUP_ID'], ['SUBJECT_ID']);
+  AddConflictQuery(['TIME_INDEX', 'DAY_INDEX', 'GROUP_ID', 'SUBJECT_ID',
+    'SUBJECT_TYPE_ID', 'PROFESSOR_ID', 'PROFESSOR_ID', 'ROOM_ID'], []);
 
 end.
 

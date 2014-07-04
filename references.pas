@@ -164,6 +164,7 @@ begin
     SQLQuery.SQL.Text := s + Format(
       ' WHERE SCHEDULE_ITEMS.id=%d or SCHEDULE_ITEMS.id=%d', [ArrId[0], ArrId[1]]);
     SQLQuery.Open;
+    Panel.Enabled := false;
   end;
   UpdateColumns;
   Show;
@@ -173,7 +174,7 @@ procedure TReferences.BtnAddFilterClick(Sender: TObject);
 begin
   if High(FilterList.Filters) > 14 then
     exit;
-  FilterList.Add(FReferences[Id].Panel);
+  FilterList.Add(Self.Panel);
 end;
 
 procedure TReferences.BtnAddEditForm(Sender: TObject);
